@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.12"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+    id "com.google.protobuf" version "0.8.12"
+    id "idea"
+}
+
+repositories {
+    mavenCentral()
+}
+
+def generatedProtoDir = "${project.buildDir}/generated/source"
+def grpcVersion = "1.26.0"
+
+dependencies {
+    implementation "com.google.protobuf:protobuf-java:3.11.4"
+    implementation "io.grpc:grpc-all:${grpcVersion}"
+    implementation "javax.annotation:javax.annotation-api:1.2"
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDirs += ".protop/path"
+        }
+        java {
+            srcDirs += generatedProtoDir + "/main/java"
+        }
+    }
+}
+
+task protop(type: Exec) {
+    commandLine "protop", "sync", "--git-refresh"
+}
+
+protobuf {
+    generatedFilesBaseDir = "${generatedProtoDir}"
+
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.11.0"
+    }
+
+    tasks.plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc { }
+            }
+            task.dependsOn protop
+        }
+    }
+}
+
+application {
+    mainClassName = 'awesomelabs.numbers.App'
+}

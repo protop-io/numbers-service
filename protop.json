@@ -1,0 +1,9 @@
+{
+  "name" : "numbers-service",
+  "version" : "0.1.0",
+  "organization" : "awesomelabs",
+  "include" : [ "." ],
+  "dependencies" : {
+    "awesomelabs/numbers": "git:https://github.com/jefferyshivers/numbers-protos"
+  }
+}
