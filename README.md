@@ -1,6 +1,6 @@
 # "MoneyService" gRPC Service Example (Java)
 
-This project contains a Java application implementing the MoneyService gRPC service from the [numbers-protos library](https://github.com/jefferyshivers/numbers-protos). You can see an example of a (Node) client that uses this service [here](https://github.com/jefferyshivers/numbers-client), and a full tutorial that goes through building these examples [here](TODO).
+This project contains a Java application implementing the MoneyService gRPC service from the [numbers-protos library](https://github.com/jefferyshivers/numbers-protos). You can see an example of a (Node) client that uses this service [here](https://github.com/jefferyshivers/numbers-client), and a full tutorial that goes through building these examples [here](https://medium.com/@jefferyshivers/create-a-public-api-with-grpc-ade4a8bfd1fc).
 
 ## Run the example
 
