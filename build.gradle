@@ -1,9 +1,11 @@
 buildscript {
     repositories {
+//        mavenLocal()
         mavenCentral()
     }
     dependencies {
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.12"
+        classpath "io.protop:protop-gradle-plugin:0.2.0"
     }
 }
 
@@ -15,11 +17,17 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 def generatedProtoDir = "${project.buildDir}/generated/source"
 def grpcVersion = "1.26.0"
+
+apply plugin: "io.protop"
+protop {
+    useLinks = true
+}
 
 dependencies {
     implementation "com.google.protobuf:protobuf-java:3.11.4"
@@ -30,16 +38,12 @@ dependencies {
 sourceSets {
     main {
         proto {
-            srcDirs += ".protop/path"
+            srcDirs += protop.path
         }
         java {
             srcDirs += generatedProtoDir + "/main/java"
         }
     }
-}
-
-task protop(type: Exec) {
-    commandLine "protop", "sync", "--git-refresh"
 }
 
 protobuf {
@@ -57,10 +61,8 @@ protobuf {
 
     generateProtoTasks {
         all().each { task ->
-            task.plugins {
-                grpc { }
-            }
-            task.dependsOn protop
+            task.plugins { grpc { } }
+            task.dependsOn { protopSync }
         }
     }
 }
